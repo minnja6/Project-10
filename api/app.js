@@ -5,13 +5,13 @@ const express = require('express');
 const path = require('path');
 const indexRouter = require('./routes/courses');
 const usersRouter = require('./routes/users');
-
+var cors = require('cors');
 // create the Express app
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cors());
 app.use('/api', indexRouter);
 app.use('/api', usersRouter);
 
