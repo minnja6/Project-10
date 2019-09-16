@@ -1,11 +1,13 @@
-//Stateless functional component
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default class Header extends React.PureComponent {
   render() {
+    let authUser = null;
     const { context } = this.props;
-    const authUser = context.authenticatedUser;
+    if(context)
+    {authUser = context.authenticatedUser};
+
     return (
       <div className="header">
         <div className="bounds">
@@ -13,7 +15,7 @@ export default class Header extends React.PureComponent {
           <nav>
             {authUser ? (
               <React.Fragment>
-                <span>Welcome, {authUser.name}!</span>
+                {/* <span>Welcome, {authUser.name}!</span> */}
                 <Link to="/signout">Sign Out</Link>
               </React.Fragment>
             ) : (
