@@ -1,34 +1,30 @@
+// Imports
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
-export default class Header extends React.PureComponent {
-  render() {
-    let authUser = {};
-    const { context } = this.props;
-    if(context)
-    {authUser = context.authenticatedUser};
-
-    return (
-      <div className="header">
-        <div className="bounds">
-          <Link className="header--logo" to="/courses/">Courses</Link>
-          <nav>
-            {authUser ? (
-              <React.Fragment>
-                {/* <span>Welcome, {authUser.name}!</span> */}
-                
-                <Link className="signup" to="/signup">Sign Up</Link>
-                <Link className="signin" to="/signin">Sign In</Link>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-              <Link to="/signin">Sign In</Link>
-              <Link to="/signout">Sign Out</Link>
-              </React.Fragment>
-            )}
-          </nav>
-        </div>
-      </div>
-    );
-  }
+// Renders the header
+const Header = (props) => {
+	const checkUserStatus = () => {
+		if(props.loggedIn && props.user) {
+			return(<nav><span>Welcome {props.user}!</span><Link className="signout" to="/signout">Sign Out</Link></nav>);
+		} else {
+			return(
+				<nav>
+					<Link className="signup" to="/signup">Sign Up</Link>
+					<Link className="signin" to={{pathname: '/signin', state: { from: window.location.pathname }}}>Sign In</Link>
+				</nav>
+			);
+		}
+	};
+	
+	return (
+		<div className="header">
+			<div className="bounds">
+				<h1 className="header--logo"><Link to="/">Courses</Link></h1>
+				{checkUserStatus()}
+			</div>
+		</div>
+	);	
 };
+
+export default Header;
