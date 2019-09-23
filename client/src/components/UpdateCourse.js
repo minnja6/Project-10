@@ -36,8 +36,6 @@ export default class UpdateCourse extends Component {
 
   }
   
-
- 
   render() {
     
     const { title, description, estimatedTime, materialsNeeded, courseUser, errors } = this.state

@@ -6,30 +6,26 @@ const Context = React.createContext();
 
 export class Provider extends Component {
 
+  state = {    //authUser return with cookie or return null
+    authenticatedUser: Cookies.getJSON('authenticatedUser') || null
+  };
+
   constructor() {
     super();
-    this.data = new Data();
+    this.data = new Data();    //Data object for access
   }
 
-  state = {
-    authenticatedUser: Cookies.getJSON('authenticatedUser') || null
-  }
-
-  render() {
-
+  render() {     
     const { authenticatedUser } = this.state;
-
-    const value = {
+    const value = {     //look for Value of AuthUser
       authenticatedUser,
       data: this.data,
-      actions: { // Add the 'actions' property and object
+      actions: {
         signIn: this.signIn,
-        signOut: this.signOut,
-      
-      }
+        signOut: this.signOut
+      },
     };
-      
-    return (
+    return (         //Return context value/children
       <Context.Provider value={value}>
         {this.props.children}
       </Context.Provider>  
@@ -37,27 +33,26 @@ export class Provider extends Component {
   }
 
   
-  signIn = async (emailAddress, password) => {
-    const user = await this.data.getUser(emailAddress, password);
-    if (user !== null) {
+  signIn = async (emailAddress, password) => {   //Signin function
+    const user = await this.data.getUser(emailAddress, password);  //Data from Data.js
+    user.password = password;
+
+    if (user !== null) {    //If user is not null, return state of authUser
       this.setState(() => {
         return {
-          authenticatedUser: user,
-        }
-      })
-      // Set Cookie
+          authenticatedUser: user
+        };
+      });
+     
       Cookies.set('authenticatedUser', JSON.stringify(user), { expires: 1 });
     }
-    return user;
+    return user;    //Return user signin
   }
 
-  signOut = () => {
-    this.setState({ authenticatedUser: null })
+  signOut = () => {   //SignOut function
+    this.setState({ authenticatedUser: null });
     Cookies.remove('authenticatedUser');
   }
-
- 
-
 }
 
 export const Consumer = Context.Consumer;
