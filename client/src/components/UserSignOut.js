@@ -1,19 +1,10 @@
-// Imports
 import React from 'react';
-import {Redirect} from 'react-router-dom';
-import {Cookies} from 'react-cookie';
+import { Redirect } from 'react-router-dom';
 
-// User sign out
-const UserSignOut = (props) => {
-	const cookies = new Cookies();
-	cookies.remove("user", {path: "/"});
-	cookies.remove("emailAddress", {path: "/"});
-	cookies.remove("password", {path: "/"});
-	cookies.remove("userId", {path: "/"});
-	props.signout();
-	return(
-		<Redirect to="/" />
-	);
-};
+export default ({ context }) => {
+  context.actions.signOut();
 
-export default UserSignOut;
+  return (
+    <Redirect to="/" />
+  );
+}

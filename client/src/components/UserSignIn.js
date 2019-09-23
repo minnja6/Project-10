@@ -1,94 +1,109 @@
-// Imports
-import React, {Component} from 'react';
-import {Redirect, Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-// Components
-import Header from './Header';
+import Form from './Form';
 
-// Renders the sign in page
-class UserSignIn extends Component {
-	// `signin` stores all the input data
-	// `redirect` stores a boolean to redirect when signing in
-	// `redirectTo` stores the pathname to redirect to after signing in (the previous page the user visited)
-	state = {
-		signin: {
-			emailAddress: '',
-			password: ''
-		},
-		redirect: false,
-		redirectTo: '/'
-	};
 
-	componentDidMount() {
-		if(this.props.loggedIn) {
-			this.setState({
-				redirect: true,
-				redirectTo: '/'
-			});
-		}
-	}
+export default class UserSignIn extends Component {
 
-	handleChange = (event) => {
-		const input = event.target;
-		this.setState(prevState => ({
-			signin: {
-				...prevState.signin,
-				[input.name]: input.value
-			}
-		}));
-	};
+  state = {
+    emailAddress: '',
+    password: '',
+    type: 'password',
+    errors: [],
+  }
 
-	// Diisplays validation errors
-	checkForErrors() {
-		if(this.props.errors.length > 0) {
-			return React.createElement("div", {className: "validation-errors"},
-				React.createElement("ul", null, this.props.errors.map((error, index) => <li key={index}>{error}</li>))
-			);
-		}
-	}
+  // shows / hide password input onClick
+  // by setting the type of input from 'input' or 'password'
+  showHide = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({
+      type: this.state.type === 'password' ? 'input' : 'password'
+    })  
+  }
 
-	// Handles signing in globally
-	login = (event) => {
-		this.props.signin(true, {...this.state.signin}, event);
-		
-		let location = this.props.location.state.from;
-		if(location === "/signin") location = "/";
-		this.setState({redirect: true, redirectTo: location});
-	};
+  
 
-	render() {
-		return (
-			<div>
-				{this.state.redirect ? <Redirect to={this.state.redirectTo} /> : null}
-				
-				<Header loggedIn={this.props.loggedIn} />
-				<div className="bounds">
-					<div className="grid-33 centered signin">
-						<h1>Sign In</h1>
-						<div>
-						
-						{this.checkForErrors()}
+  render() {
 
-						<form onSubmit={this.login} action="/signin" method="GET">
-							<div>
-								<input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" onChange={this.handleChange} />
-							</div>
-							<div>
-								<input id="password" name="password" type="password" className="" placeholder="Password" onChange={this.handleChange} />
-							</div>
-							<div className="grid-100 pad-bottom">
-								<button className="button" type="submit">Sign In</button>
-								<Link className="button button-secondary" to="/">Cancel</Link>
-							</div>
-						</form>
-						</div>
-						<p>&nbsp;</p>
-						<p>Don't have a user account? <Link to="/signup">Click here</Link> to sign up!</p>
-					</div>
-				</div>
-			</div>
-		);
-	}
+    const { emailAddress, password, type, errors } = this.state;
+    
+
+    return(
+      <div className="bounds">
+        <div className="grid-33 centered signin">
+          <h1>Sign In</h1>
+          <div>
+            <Form 
+              submit={this.submit}
+              cancel={this.cancel}
+              errors={errors}
+              submitButtonText="Sign In"
+              elements={() => (
+                <React.Fragment>
+                  <input 
+                    id="emailAddress" 
+                    name="emailAddress" 
+                    type="text" 
+                    onChange={this.change}
+                    placeholder="Email Address" 
+                    value={emailAddress} />
+                  <input 
+                    id="password" 
+                    name="password" 
+                    type={type} 
+                    onChange={this.change}
+                    placeholder="Password" 
+                    value={password} />
+                    <span className="show" 
+                      onClick={this.showHide}>{this.state.type === 'password' ? 'Show' : 'Hide'}
+                    </span>
+                </React.Fragment>
+              )}/>
+          </div>
+          <p>&nbsp;</p>
+          <p>Don't have a user account? <Link to="/signup">Click here</Link> to sign up!</p>
+        </div>
+      </div>
+    ); 
+  }
+  // sets the state to the input value on change
+  change = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState(() => {
+      return {
+        [name]: value
+      };
+    });
+  }
+  //Sign In an authenticated User on submit
+  submit = () => {
+    const { emailAddress, password } = this.state;
+    const { context } = this.props
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    // imports the signIn() method defined in Data.js
+    // accessed via the destructured context variable to sign in a user
+    context.actions.signIn(emailAddress, password) 
+     .then(user => {
+       if (user === null ) {
+        this.setState(() => {
+          return {errors: ['Sign-in was unsuccessful']};
+        })
+       } else {
+         this.props.history.push(from);
+         
+       }
+     })
+     .catch(err => {
+        console.log(err)
+        this.props.history.push('/notfound');
+     })
+  }
+  // cancels and return the user to the homepage
+  cancel = () => {
+    this.props.history.push('/');
+  }
+  
 }
-
-export default UserSignIn;
