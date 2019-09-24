@@ -1,8 +1,9 @@
-import React, { Component } from 'react';      //Imports added
+import React, { Component } from 'react';      
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import ReactMarkDown from "react-markdown";
-export default class CourseDetail extends Component {   //Stateless component function
+//Stateless component function
+export default class CourseDetail extends Component {
 
     constructor() {
         super();
@@ -12,10 +13,10 @@ export default class CourseDetail extends Component {   //Stateless component fu
         };
     }
 
-    componentDidMount() {            //Component mount, getting data from url              
+    componentDidMount() {
 
         const { id } = this.props.match.params;
-
+        //getting courses from api using axios
         axios.get(`http://localhost:5000/api/courses/${id}`)
             .then(response => {
                 this.setState({
@@ -26,50 +27,50 @@ export default class CourseDetail extends Component {   //Stateless component fu
             .catch(error => {
                 console.log('Error fetching data', error);
 
-                if (error == 'Error: Request failed with status code 404') {
+                if (error === 'Error: Request failed with status code 404') {
                     this.props.history.push('/notfound');
-                    }
-                    else {
+                }
+                else {
                     this.props.history.push('/error');
-                    }
+                }
             });
     }
-
-    delete = () => {      //Delete course if authenticated user
+    //Delete course if authenticated user
+    delete = () => {      
         const { context } = this.props;
         const { id } = this.props.match.params;
 
         const authUser = context.authenticatedUser;
 
         if (authUser == null) {
-            this.setState({ errors: [{ message: "You have to be logged in to update a course"}] });
+            this.setState({ errors: [{ message: "You have to be logged in to update a course" }] });
             return;
         }
 
         if (window.confirm('Are you sure you want to delete this course?')) {
-        context.data.deleteCourse(id, authUser.username, authUser.password)
-            .then(error => {
+            context.data.deleteCourse(id, authUser.username, authUser.password)
+                .then(error => {
 
-                
-                
-                if (error.status == 403 || error.status == 404) {
-                    this.setState({ errors: [{message: error.message}] });
-                }
-                else {
-                    this.setState({ errors: []});
 
-                    this.props.history.push('/');
 
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-                this.props.history.push('/error');
-            });
+                    if (error.status === 403 || error.status === 404) {
+                        this.setState({ errors: [{ message: error.message }] });
+                    }
+                    else {
+                        this.setState({ errors: [] });
+
+                        this.props.history.push('/');
+
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.props.history.push('/error');
+                });
         }
     }
-
-    render() {          //Render data & auth user can update or delete course
+    //Render data & authenticateduser can update or delete a course
+    render() {
         let course = {};
         let user = {};
         const { context } = this.props;
@@ -81,23 +82,23 @@ export default class CourseDetail extends Component {   //Stateless component fu
         }
 
         return (
-          <div>
-            <div className="actions--bar">
-                <div className="bounds">
+            <div>
+                <div className="actions--bar">
+                    <div className="bounds">
                         <div className="grid-100">
                             {
-                                authUser && authUser.id == user.id ?   //Restricting user tenarary
-                            <span>
-                                <Link className="button" to={`/courses/${course.id}/update/`} >Update Course</Link>
-                                <Link onClick={this.delete} className="button" to="#" >Delete Course</Link>
-                                </span>
-                                :null
+                                authUser && authUser.id === user.id ?
+                                    <span>
+                                        <Link className="button" to={`/courses/${course.id}/update/`} >Update Course</Link>
+                                        <Link onClick={this.delete} className="button" to="#" >Delete Course</Link>
+                                    </span>
+                                    : null
                             }
-                                <Link className="button button-secondary" to="/" >Return to List</Link></div>
+                            <Link className="button button-secondary" to="/" >Return to List</Link></div>
+                    </div>
                 </div>
-            </div>
                 <div className="bounds course--detail">
-                <ErrorsDisplay errors={this.state.errors} />
+                    <ErrorsDisplay errors={this.state.errors} />
                     <div className="grid-66">
                         <div className="course--header">
                             <h4 className="course--label">Course</h4>
@@ -118,14 +119,14 @@ export default class CourseDetail extends Component {   //Stateless component fu
                                 <li className="course--stats--list--item">
                                     <h4>Materials Needed</h4>
                                     <ul>
-                                        <ReactMarkDown source={course.materialsNeeded} />    
-                                    </ul>                   
+                                        <ReactMarkDown source={course.materialsNeeded} />
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                </div> 
-          </div>
+                </div>
+            </div>
         )
     };
 }

@@ -1,8 +1,5 @@
-import React, { Component }  from 'react';         //Imports for all routes used
-import logo from './logo.svg';
+import React, { Component } from 'react';         //Imports for all routes used
 import './App.css';
-import { createCipher } from 'crypto';
-import axios from 'axios';
 
 import {
     BrowserRouter as Router,      //BrowerRouter/Switch
@@ -34,19 +31,10 @@ const CourseDetailWithContext = withContext(CourseDetail);
 
 
 export default class App extends Component {               //Stateless component function
-
-    constructor() {
-        super();
-    }
-
-    componentDidMount() {  //Called after component to get data
-
-    }
-
     render() {
-        
+
         return (            //Routes set up for each task, private route for authentication, create & update courses
-            <Router>  
+            <Router>
                 <div>
                     <HeaderWithContext />
 
@@ -60,7 +48,7 @@ export default class App extends Component {               //Stateless component
                         <PrivateRoute path="/courses/:id/update" component={UpdateCourseWithContext} />
                         <Route path="/forbidden" component={Forbidden} />
                         <Route path="/error" component={UnhandledError} />
-                        <Route path="/notfound" component={NotFound} /> 
+                        <Route path="/notfound" component={NotFound} />
                         <Route component={NotFound} />
                     </Switch>
                 </div>

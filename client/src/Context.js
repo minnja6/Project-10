@@ -5,8 +5,8 @@ import Data from './Data';
 const Context = React.createContext(); 
 
 export class Provider extends Component {
-
-  state = {    //authUser return with cookie or return null
+  //authUser return with cookie or return null
+  state = {    
     authenticatedUser: Cookies.getJSON('authenticatedUser') || null
   };
 
@@ -14,10 +14,10 @@ export class Provider extends Component {
     super();
     this.data = new Data();    //Data object for access
   }
-
+  //look for Value of authenticatedUser
   render() {     
     const { authenticatedUser } = this.state;
-    const value = {     //look for Value of AuthUser
+    const value = {     
       authenticatedUser,
       data: this.data,
       actions: {
@@ -32,12 +32,13 @@ export class Provider extends Component {
     );
   }
 
-  
-  signIn = async (emailAddress, password) => {   //Signin function
-    const user = await this.data.getUser(emailAddress, password);  //Data from Data.js
+  //Signin function
+  signIn = async (emailAddress, password) => {   
+    const user = await this.data.getUser(emailAddress, password);  
     user.password = password;
-
-    if (user !== null) {    //If user is not null, return state of authUser
+    
+    //If user is not null, return authenticatedUser
+    if (user !== null) {    
       this.setState(() => {
         return {
           authenticatedUser: user
@@ -46,10 +47,11 @@ export class Provider extends Component {
      
       Cookies.set('authenticatedUser', JSON.stringify(user), { expires: 1 });
     }
-    return user;    //Return user signin
+    //Return user signin
+    return user;    
   }
-
-  signOut = () => {   //SignOut function
+  //SignOut function
+  signOut = () => {   
     this.setState({ authenticatedUser: null });
     Cookies.remove('authenticatedUser');
   }

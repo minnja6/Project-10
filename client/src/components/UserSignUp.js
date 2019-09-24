@@ -102,7 +102,7 @@ export default class UserSignUp extends Component {
     // Create user
     let user = {};
 
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       this.setState({
         errors: ["password and confirm password do not match"]
       })
@@ -137,7 +137,6 @@ export default class UserSignUp extends Component {
       });
   
   }
-
   cancel = () => {
    this.props.history.push('/');
   }

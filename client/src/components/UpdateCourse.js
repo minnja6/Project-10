@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import UpdateCourseForm from './UpdateCourseForm';
 
 export default class UpdateCourse extends Component {
+    //setting the state of title,description,estimatedTime,materialsNeeded,FirstName,LastName, and errors
     state = {
         title: '',
         description: '',
@@ -12,16 +12,16 @@ export default class UpdateCourse extends Component {
         authorLastName: '',
         errors: [],
     }
-
-    componentDidMount() {             //Called after component is added to fetch the data. 
+    //setting context to this.props and id to this.props.match.params
+    componentDidMount() {              
 
         const { context } = this.props;
         const { id } = this.props.match.params;
 
         context.data.getCourse(id)
             .then(data => {
-
-                if (data.status == 404) {
+                //if no data is found, show the not found componenet, else, show courses and user and no errors 
+                if (data.status === 404) {
                     this.setState({ errors: [{ message: data.message }] });
                     this.props.history.push('/notfound');
                 } else {
@@ -37,13 +37,14 @@ export default class UpdateCourse extends Component {
 
                 }
             })
+            //catch and log error
             .catch((err) => {
                 console.log(err);
                 this.props.history.push('/error');
             });
     }
-
-    render() {      //Render using CourseForm
+    //rendering title,description,estimatedTime,materialsNeeded,FirstName,LastName, and errors
+    render() {      
         const {
             title,
             description,
@@ -135,10 +136,10 @@ export default class UpdateCourse extends Component {
         context.data.updateCourse(id, course, authUser.username, authUser.password)
             .then(error => {
 
-                if (error.name == 'SequelizeValidationError') {
+                if (error.name === 'SequelizeValidationError') {
                     this.setState({ errors: error.errors });
                 
-                } else if (error.status == 403) {
+                } else if (error.status === 403) {
                     this.setState({ errors: [{message: error.message}] })
                     this.props.history.push('/forbidden');
                 }

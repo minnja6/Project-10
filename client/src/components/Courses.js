@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-
 import axios from 'axios';
-
 import { Link } from 'react-router-dom';
 
 export default class Courses extends Component {
@@ -25,7 +23,7 @@ export default class Courses extends Component {
             .catch(error => {
                 console.log('Error fetching data', error);
 
-                 if (error == 'Error: Request failed with status code 500') {
+                 if (error === 'Error: Request failed with status code 500') {
                 window.location.href = '/error';
                  }
             });
