@@ -8,7 +8,7 @@ const authentication = require('./auth');
 const filter = {
   include: [{
     model: User,
-    attributes: { exclude: ['password', 'createdAt', 'updatedAt'] }
+    attributes: { exclude: ['createdAt', 'updatedAt'] }
   }],
   attributes: { exclude: ['createdAt', 'updatedAt'] }
 }

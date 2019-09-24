@@ -42,7 +42,7 @@ export default class CourseDetail extends Component {
 
         const authUser = context.authenticatedUser;
 
-        if (authUser == null) {
+        if (authUser === null) {
             this.setState({ errors: [{ message: "You have to be logged in to update a course" }] });
             return;
         }

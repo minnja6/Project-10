@@ -10,15 +10,14 @@ export default class Courses extends Component {
             data: []
         };
     }
-
-    componentDidMount() {    //Get api courses when mounted
+    //Get api courses when mounted
+    componentDidMount() {    
 
         axios.get('http://localhost:5000/api/courses')
             .then(response => {
                 this.setState({
                     data: response.data
                 });
-
             })
             .catch(error => {
                 console.log('Error fetching data', error);
@@ -32,7 +31,7 @@ export default class Courses extends Component {
     render() {       
         
         let dataHtml = this.state.data.map(dataItem =>
-            <div className="grid-33"> <Link className="course--module course--link" to={`/courses/${dataItem.id}`} >
+            <div key={dataItem.id} className="grid-33"> <Link className="course--module course--link" to={`/courses/${dataItem.id}`} >
                 <h4 className="course--label">Course</h4>
                 <h3 className="course--title">{dataItem.title}</h3>
             </Link></div>
