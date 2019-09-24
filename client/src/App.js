@@ -1,113 +1,70 @@
-// import React, { Component } from 'react';
-// import {
-//   BrowserRouter,
-//   Route,
-//   Redirect,
-//   Switch
-// } from 'react-router-dom';
-// import '../src/styles/global.css';
+import React, { Component }  from 'react';         //Imports for all routes used
+import logo from './logo.svg';
+import './App.css';
+import { createCipher } from 'crypto';
+import axios from 'axios';
 
-// // Import App Components
-// import Header from './components/Header';
-// import Courses from './components/Courses';
-// import CourseDetail from './components/CourseDetail';
-// import CreateCourse from './components/CreateCourse';
-// import UserSignUp from './components/UserSignUp';
-// import UserSignIn from './components/UserSignIn';
-// import UserSignOut from './components/UserSignOut';
-// import UpdateCourse from './components/UpdateCourse';
-// import ErrorPage from './components/Error';
-// import Forbidden from './components/Forbidden'
-// import NotFound from './components/NotFound';
-
-// // Connect the App Component to Context
-// import withContext from './Context';
-// // Import the PrivateRoute Component
-// import PrivateRoute from './PrivateRoute';
-
-// const HeaderWithContext = withContext(Header);
-// const UserSignUpWithContext = withContext(UserSignUp);
-// const UserSignInWithContext = withContext(UserSignIn);
-// const UserSignOutWithContext = withContext(UserSignOut);
-// const CourseDetailWithContext = withContext(CourseDetail);
-// const CreateCourseWithContext = withContext(CreateCourse);
-// const CoursesWithContext = withContext(Courses);
-// const NotFoundWithContext = withContext(NotFound);
-// const UpdateCourseWithContext = withContext(UpdateCourse)
-
-// export default class App extends Component {
-//   // Constructor initializes state //
-  
-//     state = {
-//     };
-
-//   render() {
-//     return (         
-//       <div>
-//       <BrowserRouter>
-//         <HeaderWithContext />
-//         <Switch>        
-//           <Route exact path="/" render={ () => <Redirect to="/courses/" /> } />
-
-//           <Route path="/signin" component={UserSignInWithContext} />
-//           <Route path="/signup" component={UserSignUpWithContext} />
-//           <Route path="/signout" component={UserSignOutWithContext} />
-          
-//           <PrivateRoute exact path="/courses/createcourse/" component={CreateCourseWithContext}/>
-//           <Route exact path="/courses" component={CoursesWithContext} />
-//           <PrivateRoute path="/courses/:id/updatecourse/" component={UpdateCourseWithContext} />
-//           <Route path="/courses/:id" component={CourseDetailWithContext} />
-
-//           <Route exact path="/notfound" component={NotFoundWithContext}/>
-//           <Route exact path="/error" component={ErrorPage}/>
-//           <Route exact path="/forbidden" component={Forbidden}/>
-//           <Route component={NotFound}/>
-//         </Switch>
-//       </BrowserRouter>    
-//       </div> 
-//     );
-//   }
-// }
-import '../src/styles/global.css';
-import React from 'react';
 import {
-  BrowserRouter as Router,
-  Route,
-  Switch
+    BrowserRouter as Router,      //BrowerRouter/Switch
+    Route,
+    Switch
 } from 'react-router-dom';
 
 import Header from './components/Header';
-import NotFound from './components/NotFound';
-import UserSignUp from './components/UserSignUp';
-import UserSignIn from './components/UserSignIn';
-import UserSignOut from './components/UserSignOut';
-// import Authenticated from './components/Authenticated';
 import Courses from './components/Courses';
-import withContext from './Context';
-import PrivateRoute from './PrivateRoute';
+import CreateCourse from './components/CreateCourse';
 import CourseDetail from './components/CourseDetail';
+import UpdateCourse from './components/UpdateCourse';
+import withContext from './Context';
+import PrivateRoute from './PrivateRoute';                //HOC import
+import UserSignIn from './components/UserSignIn';
+import UserSignUp from './components/UserSignUp';
+import UserSignOut from './components/UserSignOut';
+import Forbidden from './components/Forbidden';
+import NotFound from './components/NotFound';
+import UnhandledError from './components/UnhandledError';
 
-const HeaderWithContext = withContext(Header);
-// const AuthWithContext = withContext(Authenticated);
-const UserSignUpWithContext = withContext(UserSignUp);
+const HeaderWithContext = withContext(Header);               //Defining routes being used
 const UserSignInWithContext = withContext(UserSignIn);
+const UserSignUpWithContext = withContext(UserSignUp);
 const UserSignOutWithContext = withContext(UserSignOut);
+const CreateCourseWithContext = withContext(CreateCourse);
+const UpdateCourseWithContext = withContext(UpdateCourse);
+const CourseDetailWithContext = withContext(CourseDetail);
 
-export default () => (
-  <Router>
-    <div>
-      <HeaderWithContext />
 
-      <Switch>
-        <Route exact path="/" component={Courses} />
-        {/* <PrivateRoute path="/authenticated" component={AuthWithContext} /> */}
-        <Route path="/signin" component={UserSignInWithContext} />
-        <Route path="/signup" component={UserSignUpWithContext} />
-        <Route path="/signout" component={UserSignOutWithContext} />
-        <Route exact path="/courses" component={Courses} />
-        <Route path="/courses/:id" component={CourseDetail}/>
-        <Route component={NotFound} />
-      </Switch>
-    </div>
-  </Router>
-);
+export default class App extends Component {               //Stateless component function
+
+    constructor() {
+        super();
+    }
+
+    componentDidMount() {  //Called after component to get data
+
+    }
+
+    render() {
+        
+        return (            //Routes set up for each task, private route for authentication, create & update courses
+            <Router>  
+                <div>
+                    <HeaderWithContext />
+
+                    <Switch>
+                        <Route exact path="/" component={Courses} />
+                        <PrivateRoute path="/courses/create" component={CreateCourseWithContext} />
+                        <Route exact path="/courses/:id" component={CourseDetailWithContext} />
+                        <Route path="/signin" component={UserSignInWithContext} />
+                        <Route path="/signup" component={UserSignUpWithContext} />
+                        <Route path="/signout" component={UserSignOutWithContext} />
+                        <PrivateRoute path="/courses/:id/update" component={UpdateCourseWithContext} />
+                        <Route path="/forbidden" component={Forbidden} />
+                        <Route path="/error" component={UnhandledError} />
+                        <Route path="/notfound" component={NotFound} /> 
+                        <Route component={NotFound} />
+                    </Switch>
+                </div>
+            </Router>
+        );
+    }
+}

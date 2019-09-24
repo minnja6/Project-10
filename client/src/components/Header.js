@@ -1,34 +1,34 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default class Header extends Component {
+export default class Header extends React.PureComponent {
   render() {
     const { context } = this.props;
     let authUser = null;
 
-    if(context) {
+    if(context) {    //Added if context get authUser instead of null
       authUser = context.authenticatedUser;
     }
-
+    
     return (
       <div className="header">
         <div className="bounds">
-          <Link className="header--logo" to="/">Courses</Link>
+          <h1 className="header--logo">Courses</h1>
           <nav>
-            {authUser ?
+            {authUser ? (   //If authUser tenarary then show React Fragment (signin & up)
               <React.Fragment>
-                <span>Welcome, {authUser.firstName} {authUser.lastName}!</span>
-                <Link className="signout" to="/signout">Sign Out</Link>
+                <span>Welcome, {authUser.name}!</span>
+                <Link to="/signout">Sign Out</Link>
               </React.Fragment>
-              :
+            ) : (
               <React.Fragment>
                 <Link className="signup" to="/signup">Sign Up</Link>
                 <Link className="signin" to="/signin">Sign In</Link>
               </React.Fragment>
-            }
+            )}
           </nav>
         </div>
       </div>
     );
   }
-}
+};

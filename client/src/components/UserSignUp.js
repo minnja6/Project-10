@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Form from './Form';
+import Form from './Form';   //Imported Form used
 
 export default class UserSignUp extends Component {
   state = {
@@ -11,9 +11,9 @@ export default class UserSignUp extends Component {
     confirmPassword: '',
     errors: [],
   }
-  //render firstName, lastName, email and password
+
   render() {
-    const {        
+    const {        //Render state 
       firstName,
       lastName,
       emailAddress,
