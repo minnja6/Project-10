@@ -1,3 +1,4 @@
+//imports
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -16,7 +17,7 @@ class CourseDetail extends Component {
   componentDidMount() {
     this.getCourseDetail();
   }
-// Axios GET request for individual course
+// Axios GET request for each course
   getCourseDetail = () => {
 
     axios.get("http://localhost:5000/api/courses/" + this.props.match.params.id)
@@ -26,24 +27,19 @@ class CourseDetail extends Component {
           course,
           username: course.User.firstName + " " + course.User.lastName
         });
-        console.log("course.User.id is " + course.User.id);
-        console.log(localStorage.getItem("id"));
-        console.log(this.state.course.userId);
    })
 
-// Display Error page for all errors
+// Display errors
 
    .catch(err => {
      if(err.response.status === 400 ) {
        this.props.history.push("/error");
-       console.log(err.response, err);
      } else if(err.response.status === 500) {
        this.props.history.push("/error");
-       console.log(err.response, err);
      }
    });
   }
-// Axios DELETE request to delete individual course
+// Using Axios.delete to delete each course 
 
   handleDelete  = (e) => {
     e.preventDefault();
@@ -61,7 +57,6 @@ class CourseDetail extends Component {
     .catch(err => {
       if(err.response.status === 404 || 500) {
         this.props.history.push("/error");
-        console.log(err.response.data);
       }
     });
   }
@@ -76,7 +71,7 @@ class CourseDetail extends Component {
         <div className="actions--bar">
           <div className="bounds">
             <div className="grid-100">
-    {/* allow update and delete if the course user matches user that has signed in */}
+    {/* allow update and delete if the courses user matches user that is signed in */}
              { ( authenticated && (userId === this.state.course.userId) )
                ?
               (

@@ -51,24 +51,19 @@ export default class CourseDetail extends React.Component {
                 this.props.history.push("/courses");
                 console.log("course successfully created");
 
-                //  Catch Validation Errors returned from the REST API and display for user guidance, for other errors redirect to Errors page
+                //  Catch Validation Errors returned from the API
             }).catch(err => {
                 if (err.response.status === 400) {
                     this.setState({
-                        //errMsg: err.response.data.err[0].message
                         errMsg: err.response.data.message
                     })
                 } else if (err.response.status === 401) {
                     this.setState({
-                        //errMsg: err.response.data.error.message
                         errMsg: err.response.data.message
                     })
 
                 } else {
                     this.props.history.push("/error");
-                    //console.log(err.response.status);
-                    //console.log(err.response.status);
-                    //console.log(err.response.data.message );
                 }
             });
     }
