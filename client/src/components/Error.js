@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
+//error page
 const Error = (err) => {
   return(
     <div id="root">

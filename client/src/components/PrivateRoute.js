@@ -3,7 +3,7 @@ import {Route, Redirect} from 'react-router-dom';
 import { Consumer } from './UserContext';
 
 
-// Private routes for authorized actions '/courses/create' and '/courses/:id/update'
+// Private routes for authorized actions 
 const PrivateRoute = ({ component: Component, ...rest }) => {
 	return (
 		<Consumer>{ ({ authenticated }) => (

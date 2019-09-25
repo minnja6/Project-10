@@ -2,9 +2,6 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
-
-
-
 export default class Courses extends React.Component {
     state = {
       isLoading: true,

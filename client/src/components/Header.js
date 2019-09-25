@@ -13,7 +13,7 @@ const Header = () => {
 					  <NavLink to="/courses">Courses</NavLink>
 					</h1>
 
-	{/*welcome greeting with user name*/}
+	{/*welcome, with user name*/}
 					{ (authenticated) ?
 							(<nav>
 								<span>Welcome {user.firstName} {user.lastName} !</span>

@@ -18,7 +18,7 @@ export default class CourseDetail extends React.Component {
 
 
 
-    // Receives Course data input by User
+    // Receives Course data from User
 
     handleCourseInput = (e) => {
         e.preventDefault();
@@ -29,7 +29,7 @@ export default class CourseDetail extends React.Component {
     };
     handleNewCourse = (e, error) => {
         e.preventDefault();
-        // Axios POST request to post course to api db
+        // Axios POST request to post course to api database
 
         axios("http://localhost:5000/api/courses", {
             method: "POST",
@@ -51,7 +51,7 @@ export default class CourseDetail extends React.Component {
                 this.props.history.push("/courses");
                 console.log("course successfully created");
 
-                //  Catch Validation Errors returned from the API
+                //  Catch Validation Errors returned from API
             }).catch(err => {
                 if (err.response.status === 400) {
                     this.setState({
