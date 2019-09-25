@@ -1,34 +1,38 @@
+// import React from 'react';
+import { Consumer } from './UserContext';
+import { NavLink, Link } from 'react-router-dom';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-export default class Header extends React.PureComponent {
-  render() {
-    const { context } = this.props;
-    let authUser = null;
 
-    if(context) {    //Added if context get authUser instead of null
-      authUser = context.authenticatedUser;
-    }
-    
-    return (
-      <div className="header">
-        <div className="bounds">
-          <Link className="header--logo" to="/">Courses</Link>
-          <nav>
-            {authUser ? (   //If authUser tenarary then show React Fragment (signin & up)
-              <React.Fragment>
-                <span>Welcome, {authUser.firstName} {authUser.lastName}!</span>
-                <Link to="/signout">Sign Out</Link>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                <Link className="signup" to="/signup">Sign Up</Link>
-                <Link className="signin" to="/signin">Sign In</Link>
-              </React.Fragment>
-            )}
-          </nav>
-        </div>
-      </div>
-    );
-  }
-};
+const Header = () => {
+	return (
+		<Consumer>{({ user, authenticated, signOut }) =>(
+			<div className="header">
+				<div className="bounds">
+					<h1 className="header--logo">
+					  <NavLink to="/courses">Courses</NavLink>
+					</h1>
+
+	{/*welcome greeting with user name*/}
+					{ (authenticated) ?
+							(<nav>
+								<span>Welcome {user.firstName} {user.lastName} !</span>
+								<Link className="signout" to="/signOut" onClick={signOut}>Sign Out</Link>
+							</nav>)
+							:
+							(<nav>
+								<NavLink className="signup" to="/signup">Sign Up</NavLink>
+								<NavLink className="signin" to="/signin">Sign In</NavLink>
+							</nav>)
+					}
+				</div>
+			</div>
+		)}
+		</Consumer>
+	);
+}
+
+
+
+export default Header;
+
