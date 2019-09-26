@@ -4,6 +4,8 @@ const router = express.Router();
 const auth = require('basic-auth');
 const bcryptjs = require('bcryptjs');
 const { User } = require('../models');
+const { check } = require('express-validator');
+
 
 function asyncHandler(cb) {
   return async (req, res, next) => {
@@ -30,7 +32,7 @@ const authenticateUser = async (req, res, next) => {
       if (authenticated) {
         req.currentUser = await User.findOne({
           where: { emailAddress: credentials.name },
-          attributes: { exclude: ['password', 'createdAt', 'updatedAt'] }
+          attributes: { exclude: ['createdAt', 'updatedAt'] }
         })
       } else {
         message = `Authentication failure for username: ${user.emailAddress}`
@@ -58,19 +60,18 @@ router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
 // Creates a user, sets the Location header to "/", and returns no content
 router.post('/users', asyncHandler(async (req, res) => {
   const errors = [];
-  const userContent = req.body
-  if (!userContent.firstName) {
-    errors.push('Please provide a value for "firstName"');
-  }
-  if (!userContent.lastName) {
-    errors.push('Please provide a value for "lastName"');
-  }
-  if (!userContent.emailAddress) {
-    errors.push('Please provide a value for "emailAddress"');
-  }
-  if (!userContent.password) {
-    errors.push('Please provide a value for "password"');
-  }
+  check('firstName')
+    .exists({ checkNull: true, checkFalsy: true })
+    .withMessage('Please include a "firstName"'),
+  check('lastName')
+    .exists({ checkNull: true, checkFalsy: true })
+    .withMessage('Please include a "lastName"'),
+  check('emailAddress')
+    .exists({ checkNull: true, checkFalsy: true })
+    .withMessage('Please include a "emailAddress"')
+  check('password')
+    .exists({ checkNull: true, checkFalsy: true })
+    .withMessage('Please include a "password"')
 
   if (errors.length == 0) {
     const duplicateEmail = await User.findOne({
@@ -84,7 +85,7 @@ router.post('/users', asyncHandler(async (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         emailAddress: req.body.emailAddress,
-        password: bcryptjs.hashSync(req.body.password)
+        password: req.body.password
       })
       res.status(201).location('/').end();
     }

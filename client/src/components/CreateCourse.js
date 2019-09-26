@@ -68,8 +68,6 @@ export default class CourseDetail extends React.Component {
             });
     }
 
-
-
     render() {
         const { title, description, estimatedTime, materialsNeeded, errMsg } = this.state;
         return (

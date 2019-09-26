@@ -71,16 +71,16 @@ class UserSignUp extends Component {
   				<div className="grid-33 centered signin">
   					<h1>Sign Up</h1>
   					<div>
-						 { errMsg ? (
+						 {errMsg ? (
 							<div>
-							 <h2 className='validation--errors--label'>Registration Error</h2>
-							  <div className='validation-errors'>
+							 <h2 className="validation--errors--label">Registration Error</h2>
+							  <div className="validation-errors">
 								 <ul>
-									<li>{ errMsg }</li>
+									<li>{errMsg}</li>
 								 </ul>
 							  </div>
 						  	</div>
-							) : ""}
+							) : ''}
   						<form onSubmit={ e => this.handleSignUp(e, signIn, firstName, lastName, emailAddress, password)} >
   							<div>
 								<input id="firstName"
